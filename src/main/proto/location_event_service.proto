@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package me.robertlit.datastream;
+
+import "location_event.proto";
+
+service LocationEventService {
+  rpc StreamLocationUpdates(stream LocationUpdate) returns (stream Event);
+}

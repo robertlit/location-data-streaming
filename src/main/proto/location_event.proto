@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package me.robertlit.datastream;
+
+message LocationUpdate {
+  double latitude = 1;
+  double longitude = 2;
+  int64 timestamp = 3;
+}
+
+message Event {
+  Type event_type = 1;
+  int64 timestamp = 2;
+
+  enum Type {
+    FAST_ACCELERATION = 0;
+    FAST_DECELERATION = 1;
+    SHARP_TURN = 2;
+    SPEED_LIMIT_VIOLATION = 3;
+    STOPPED = 4;
+  }
+}
