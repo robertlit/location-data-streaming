@@ -1,6 +1,6 @@
 # Overview
 The goal of this project is to learn how to handle and process an incoming
-stream of data. The use case is detection of motion based events based on
+stream of data. The use case is detection of motion based events in a stream of
 real-time location updates. The server receives a stream of location updates
 which consist of latitude, longitude, and timestamp. The data is transformed
 and checked; appropriate events are streamed back to the client.
