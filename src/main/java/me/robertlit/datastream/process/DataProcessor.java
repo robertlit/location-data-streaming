@@ -18,7 +18,7 @@ public class DataProcessor {
     private final SlidingWindow slidingWindow;
 
     private final List<Transformation> transformations;
-    private final List<CheckProcessor> eventProcessors;
+    private final List<CheckProcessor> checkProcessors;
     private final ResponseReceiver responseReceiver;
 
     private final ScheduledExecutorService executorService;
@@ -33,7 +33,7 @@ public class DataProcessor {
         this.slidingWindow = slidingWindow;
 
         this.transformations = new ArrayList<>();
-        this.eventProcessors = new ArrayList<>();
+        this.checkProcessors = new ArrayList<>();
         this.responseReceiver = responseReceiver;
 
         this.executorService = executorService;
@@ -46,8 +46,8 @@ public class DataProcessor {
         transformations.add(transformation);
     }
 
-    public void addEventCheck(@NotNull CheckProcessor eventProcessor) {
-        eventProcessors.add(eventProcessor);
+    public void addCheckProcessor(@NotNull CheckProcessor checkProcessor) {
+        checkProcessors.add(checkProcessor);
     }
 
     public @NotNull ScheduledFuture<?> start() {
@@ -66,8 +66,8 @@ public class DataProcessor {
 
             List<ExtendedLocationUpdate> transformedData = combinedTransformation.apply(data);
 
-            eventProcessors.stream()
-                    .map(eventProcessor -> eventProcessor.process(transformedData))
+            checkProcessors.stream()
+                    .map(checkProcessor -> checkProcessor.process(transformedData))
                     .flatMap(List::stream)
                     .forEach(responseReceiver::onResponse);
 

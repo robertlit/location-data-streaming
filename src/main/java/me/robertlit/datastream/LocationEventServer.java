@@ -49,8 +49,8 @@ public class LocationEventServer {
         accelerationProcessor.addCheck(new FastAccelerationCheck(maxAcceleration));
         accelerationProcessor.addCheck(new FastDecelerationCheck(maxDeceleration));
 
-        dataProcessor.addEventCheck(velocityProcessor);
-        dataProcessor.addEventCheck(accelerationProcessor);
+        dataProcessor.addCheckProcessor(velocityProcessor);
+        dataProcessor.addCheckProcessor(accelerationProcessor);
 
         LocationEventService locationEventService = new LocationEventService(dataReceiver, responseHandler);
 
