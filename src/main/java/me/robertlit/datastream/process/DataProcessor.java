@@ -60,10 +60,6 @@ public class DataProcessor {
                     .map(ExtendedLocationUpdate::fromLocationUpdate)
                     .toList();
 
-            if (data.isEmpty()) {
-                return;
-            }
-
             List<ExtendedLocationUpdate> transformedData = combinedTransformation.apply(data);
 
             checkProcessors.stream()

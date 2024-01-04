@@ -4,9 +4,7 @@ import me.robertlit.datastream.LocationEvent;
 import me.robertlit.datastream.model.ExtendedLocationUpdate;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class AccelerationProcessor implements CheckProcessor {
 
@@ -22,17 +20,22 @@ public class AccelerationProcessor implements CheckProcessor {
 
     @Override
     public @NotNull List<LocationEvent.Event> process(@NotNull List<ExtendedLocationUpdate> data) {
-        double averageAcceleration = data.stream()
+        OptionalDouble averageAccelerationOptional = data.stream()
                 .map(ExtendedLocationUpdate::getAcceleration)
                 .filter(Optional::isPresent)
                 .mapToDouble(Optional::get)
-                .average()
-                .orElseThrow(() -> new IllegalArgumentException("acceleration stream must not be empty"));
+                .average();
 
-        long averageTimestamp = (long) data.stream()
+        OptionalDouble averageTimestampOptional = data.stream()
                 .mapToLong(ExtendedLocationUpdate::getTimestamp)
-                .average()
-                .orElseThrow(() -> new IllegalArgumentException("timestamp stream must not be empty"));
+                .average();
+
+        if (averageAccelerationOptional.isEmpty() || averageTimestampOptional.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        double averageAcceleration = averageAccelerationOptional.getAsDouble();
+        long averageTimestamp = (long) averageTimestampOptional.getAsDouble();
 
         return checks.stream()
                 .filter(check -> check.check(averageAcceleration))
